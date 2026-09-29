@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RansomVanguard | Autonomous Windows Ransomware EDR & Self-Healing</title>
+    <meta name="description" content="Next-Gen Windows Server Autonomous Ransomware Detection, Sub-50ms Containment & Zero-Loss Rollback Platform">
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Top Cyber Header -->
+    <header class="cyber-header">
+        <div class="brand-group">
+            <div class="brand-icon-wrapper">
+                <i class="fa-solid fa-shield-virus brand-icon"></i>
+                <div class="pulse-ring"></div>
+            </div>
+            <div>
+                <div class="brand-title">RANSOM<span class="highlight">VANGUARD</span> <span class="badge-tag">EDR PRO</span></div>
+                <div class="brand-subtitle">Autonomous Windows Server Ransomware Defense & Instant Self-Healing</div>
+            </div>
+        </div>
+
+        <div class="header-status-group">
+            <div class="status-card" id="connection-status-card">
+                <div class="status-indicator live-pulse"></div>
+                <span id="ws-status-text">SOC AGENT CONNECTED</span>
+            </div>
+            <div class="status-card" id="defense-mode-card">
+                <i class="fa-solid fa-bolt-lightning text-accent"></i>
+                <span>MODE: <strong id="mode-text">AUTONOMOUS (&lt;50ms)</strong></span>
+            </div>
+            <button class="btn btn-danger btn-sm" id="btn-emergency-lockdown">
+                <i class="fa-solid fa-hand-holding-medical"></i> Emergency Airlock
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-layout">
+        <!-- THE 6-STAGE WORKFLOW LIFECYCLE BAR -->
+        <section class="lifecycle-section">
+            <div class="section-title-small"><i class="fa-solid fa-arrows-split-up-and-left"></i> AUTONOMOUS INCIDENT RESPONSE PIPELINE</div>
+            <div class="pipeline-container">
+                <!-- Stage 1 -->
+                <div class="stage-node active" id="node-stage-1">
+                    <div class="node-icon"><i class="fa-solid fa-eye"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 01</div>
+                        <div class="node-title">MONITOR</div>
+                        <div class="node-desc">Filesystem, I/O &amp; Canaries</div>
+                    </div>
+                    <div class="node-metric" id="metric-canaries">5 Tripwires Active</div>
+                </div>
+                <div class="pipeline-connector"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Stage 2 -->
+                <div class="stage-node" id="node-stage-2">
+                    <div class="node-icon"><i class="fa-solid fa-radar"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 02</div>
+                        <div class="node-title">DETECT</div>
+                        <div class="node-desc">Entropy &amp; Signatures</div>
+                    </div>
+                    <div class="node-metric" id="metric-entropy-rate">Entropy &lt; 5.0</div>
+                </div>
+                <div class="pipeline-connector"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Stage 3 -->
+                <div class="stage-node" id="node-stage-3">
+                    <div class="node-icon"><i class="fa-solid fa-brain"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 03</div>
+                        <div class="node-title">ANALYZE</div>
+                        <div class="node-desc">Multi-Vector Risk Scoring</div>
+                    </div>
+                    <div class="node-metric" id="metric-risk-score">Score: 0/100</div>
+                </div>
+                <div class="pipeline-connector"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Stage 4 -->
+                <div class="stage-node" id="node-stage-4">
+                    <div class="node-icon"><i class="fa-solid fa-bell"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 04</div>
+                        <div class="node-title">ALERT</div>
+                        <div class="node-desc">SIEM, WinEvent &amp; Webhook</div>
+                    </div>
+                    <div class="node-metric" id="metric-alerts-dispatched">0 Alerts</div>
+                </div>
+                <div class="pipeline-connector"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Stage 5 -->
+                <div class="stage-node" id="node-stage-5">
+                    <div class="node-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 05</div>
+                        <div class="node-title">RESPOND</div>
+                        <div class="node-desc">Kill PID &amp; Airlock C2</div>
+                    </div>
+                    <div class="node-metric" id="metric-containment-status">Armed</div>
+                </div>
+                <div class="pipeline-connector"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <!-- Stage 6 -->
+                <div class="stage-node" id="node-stage-6">
+                    <div class="node-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                    <div class="node-content">
+                        <div class="node-number">STAGE 06</div>
+                        <div class="node-title">RECOVER</div>
+                        <div class="node-desc">Zero-Loss Micro-Rollback</div>
+                    </div>
+                    <div class="node-metric" id="metric-recovery-status">Snapshots Ready</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD GRID: Telemetry HUD + Simulator + Forensics -->
+        <div class="dashboard-grid">
+            <!-- LEFT COLUMN: Real-Time Threat Radar & Telemetry -->
+            <div class="dashboard-col">
+                <!-- Threat Gauge & Vital Metrics Card -->
+                <div class="glass-panel">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-gauge-high text-accent"></i> Real-Time Host Telemetry &amp; Threat Gauge</div>
+                        <span class="badge badge-normal" id="threat-level-badge">NORMAL</span>
+                    </div>
+
+                    <div class="threat-gauge-wrapper">
+                        <div class="gauge-dial">
+                            <div class="gauge-center">
+                                <span class="gauge-score" id="gauge-score-value">0</span>
+                                <span class="gauge-label">RISK INDEX</span>
+                            </div>
+                            <svg class="gauge-svg" viewBox="0 0 100 50">
+                                <path class="gauge-bg" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke="rgba(255,255,255,0.08)"/>
+                                <path id="gauge-progress" class="gauge-fill" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke="#00f0ff" stroke-dasharray="125.66" stroke-dashoffset="125.66"/>
+                            </svg>
+                        </div>
+
+                        <div class="vital-stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-label">EVENTS / SEC</div>
+                                <div class="stat-value" id="stat-event-rate">0.0</div>
+                                <div class="stat-sub">File I/O Velocity</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">AVG SHANNON ENTROPY</div>
+                                <div class="stat-value" id="stat-entropy-val">3.42</div>
+                                <div class="stat-sub">Normal Range (0-5.5)</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">CANARIES TRIPPED</div>
+                                <div class="stat-value" id="stat-canary-trips">0 / 5</div>
+                                <div class="stat-sub">Zero False-Positive Decoys</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">MICRO-SNAPSHOTS</div>
+                                <div class="stat-value" id="stat-snapshot-count">10</div>
+                                <div class="stat-sub">Clean Cache Baseline</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Real-Time Entropy Canvas Chart -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <span><i class="fa-solid fa-chart-line text-accent"></i> Real-Time File Entropy Waveform</span>
+                            <span class="threshold-indicator"><span class="red-dot"></span> Encryption Threshold (7.55 / 8.0)</span>
+                        </div>
+                        <canvas id="entropyChart" width="500" height="120"></canvas>
+                    </div>
+                </div>
+
+                <!-- Live File System I/O Stream -->
+                <div class="glass-panel" style="margin-top: 20px;">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-file-shield text-accent"></i> Live Monitored File Activity</div>
+                        <span class="pulse-live-text"><i class="fa-solid fa-circle text-success pulse"></i> SENSING</span>
+                    </div>
+                    <div class="file-stream-table-wrapper">
+                        <table class="cyber-table" id="file-stream-table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Target File</th>
+                                    <th>Entropy</th>
+                                    <th>Risk Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody id="file-stream-tbody">
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">Listening for Windows filesystem events...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Safe Attack Simulator & Active Incidents -->
+            <div class="dashboard-col">
+                <!-- CUSTOM THREAT INGESTION & DETONATION LAB -->
+                <div class="glass-panel highlight-border">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-microchip text-accent"></i> Custom Threat Ingestion &amp; Detonation Chamber</div>
+                        <span class="badge badge-critical"><i class="fa-solid fa-shield-virus"></i> DETONATION LAB</span>
+                    </div>
+                    <p class="panel-desc">
+                        Insert custom suspicious binaries, malicious scripts, or upload suspect files. RansomVanguard immediately ingests, calculates Shannon entropy, triggers threat sensors, executes sub-50ms containment, and restores data with zero loss.
+                    </p>
+
+                    <!-- Navigation Tabs -->
+                    <div class="threat-lab-tabs">
+                        <button class="threat-lab-tab-btn active" data-tab="upload">
+                            <i class="fa-solid fa-file-arrow-up text-accent"></i> 1. Upload Artifact
+                        </button>
+                        <button class="threat-lab-tab-btn" data-tab="script">
+                            <i class="fa-solid fa-code text-warning"></i> 2. Script &amp; Payload Editor
+                        </button>
+                        <button class="threat-lab-tab-btn" data-tab="presets">
+                            <i class="fa-solid fa-viruses text-danger"></i> 3. Threat Presets Lab
+                        </button>
+                        <button class="threat-lab-tab-btn" data-tab="quarantine">
+                            <i class="fa-solid fa-box-archive text-success"></i> 4. Quarantine Vault
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: UPLOAD SUSPICIOUS FILE -->
+                    <div class="threat-lab-tab-pane active" id="tab-pane-upload">
+                        <div class="threat-dropzone" id="threat-file-dropzone">
+                            <input type="file" id="threat-file-input" style="display: none;">
+                            <div class="dropzone-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <div class="dropzone-title">Drag &amp; Drop Suspicious File Here or Click to Browse</div>
+                            <div class="dropzone-subtitle">Supports .exe, .ps1, .bat, .lockbit, .locked, .bin, .dll, .docx, or any suspicious file</div>
+                        </div>
+
+                        <div class="selected-file-card" id="selected-file-info">
+                            <div>
+                                <i class="fa-solid fa-file-shield text-accent"></i>
+                                <strong id="selected-file-name">sample_threat.exe</strong>
+                                <span class="text-muted" style="margin-left: 10px;" id="selected-file-size">0.0 KB</span>
+                            </div>
+                            <span class="badge badge-warning">READY TO DETONATE</span>
+                        </div>
+
+                        <div style="margin-top: 14px;">
+                            <button class="btn btn-gradient-danger w-100" id="btn-detonate-uploaded-file" disabled>
+                                <i class="fa-solid fa-biohazard"></i> INGEST &amp; TRIGGER 6-STAGE DEFENSE
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: CUSTOM SCRIPT & PAYLOAD EDITOR -->
+                    <div class="threat-lab-tab-pane" id="tab-pane-script">
+                        <div class="editor-toolbar">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label style="font-size: 11px; color: var(--text-muted);">Payload Name:</label>
+                                <input type="text" class="filename-input" id="custom-payload-filename" value="custom_threat.ps1" placeholder="filename.ps1">
+                            </div>
+                            <div class="editor-presets-btn-group">
+                                <button class="btn btn-outline-cyan btn-xs" id="btn-insert-preset-vss" title="Insert T1490 Shadow Copy sabotage code">
+                                    <i class="fa-solid fa-bolt"></i> VSS Wiper
+                                </button>
+                                <button class="btn btn-outline-cyan btn-xs" id="btn-insert-preset-lockbit" title="Insert LockBit dropper template">
+                                    <i class="fa-solid fa-skull"></i> LockBit Drop
+                                </button>
+                                <button class="btn btn-outline-cyan btn-xs" id="btn-insert-preset-entropy" title="Insert High-Entropy AES cipher loop">
+                                    <i class="fa-solid fa-fire"></i> AES Burst
+                                </button>
+                                <button class="btn btn-outline-cyan btn-xs" id="btn-insert-preset-canary" title="Insert Canary tripwire tampering code">
+                                    <i class="fa-solid fa-crosshairs"></i> Canary Trip
+                                </button>
+                            </div>
+                        </div>
+
+                        <textarea class="code-textarea" id="custom-payload-code" placeholder="# Write or paste malicious commands or simulated payload code here...
+# Example:
+vssadmin delete shadows /all /quiet
+$bytes = [byte[]](1..4096 | ForEach-Object { Get-Random -Minimum 0 -Maximum 256 })
+[System.IO.File]::WriteAllBytes('database.sql.locked', $bytes)"></textarea>
+
+                        <div style="margin-top: 12px;">
+                            <button class="btn btn-gradient-danger w-100" id="btn-detonate-custom-script">
+                                <i class="fa-solid fa-rocket"></i> DETONATE CUSTOM SCRIPT IN SANDBOX
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: THREAT PRESETS LAB -->
+                    <div class="threat-lab-tab-pane" id="tab-pane-presets">
+                        <div class="threat-presets-grid" id="threat-presets-grid">
+                            <!-- Populated dynamically by threat_lab.js -->
+                            <div class="text-center text-muted" style="padding: 20px;">Loading curated threat presets...</div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: QUARANTINE VAULT -->
+                    <div class="threat-lab-tab-pane" id="tab-pane-quarantine">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 12px; color: var(--text-secondary);">Isolated Suspicious Payloads (Execution Flags Stripped)</span>
+                            <span class="badge badge-normal" id="quarantine-count-badge">0 ISOLATED</span>
+                        </div>
+                        <div class="file-stream-table-wrapper" style="max-height: 180px;">
+                            <table class="cyber-table">
+                                <thead>
+                                    <tr>
+                                        <th>Artifact</th>
+                                        <th>SHA-256 Hash</th>
+                                        <th>Size</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quarantine-vault-tbody">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">Quarantine vault is empty.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAST ATTACK SIMULATOR LAB -->
+                <div class="glass-panel" style="margin-top: 20px;">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-flask-vial text-warning"></i> Quick Scenario Simulators</div>
+                        <button class="btn btn-outline-cyan btn-xs" id="btn-repopulate-sandbox">
+                            <i class="fa-solid fa-rotate"></i> Reset Sandbox Files
+                        </button>
+                    </div>
+
+                    <div class="simulator-actions-grid">
+                        <button class="sim-btn" id="btn-sim-canary">
+                            <div class="sim-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                            <div class="sim-text">
+                                <strong>1. Canary Tripwire Attack</strong>
+                                <span>Simulate decoy honeypot modification</span>
+                            </div>
+                        </button>
+
+                        <button class="sim-btn" id="btn-sim-entropy">
+                            <div class="sim-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="sim-text">
+                                <strong>2. High-Entropy Encryption Burst</strong>
+                                <span>Simulate multi-threaded AES encryption</span>
+                            </div>
+                        </button>
+
+                        <button class="sim-btn" id="btn-sim-mutation">
+                            <div class="sim-icon"><i class="fa-solid fa-shuffle"></i></div>
+                            <div class="sim-text">
+                                <strong>3. Extension Mutation (.lockbit)</strong>
+                                <span>Simulate mass extension renaming</span>
+                            </div>
+                        </button>
+
+                        <button class="sim-btn" id="btn-sim-note">
+                            <div class="sim-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                            <div class="sim-text">
+                                <strong>4. Ransom Note Drop</strong>
+                                <span>Simulate lockbit_readme.txt drop</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="full-simulation-box">
+                        <button class="btn btn-gradient-danger w-100" id="btn-sim-full">
+                            <i class="fa-solid fa-biohazard"></i> LAUNCH FULL 6-STAGE RANSOMWARE KILL-CHAIN SIMULATION
+                        </button>
+                    </div>
+                </div>
+
+                <!-- INCIDENTS & FORENSIC POST-MORTEM CARD -->
+                <div class="glass-panel" style="margin-top: 20px;">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Active Incident &amp; Threat Chain</div>
+                        <div class="action-btn-group">
+                            <button class="btn btn-outline-success btn-xs" id="btn-rollback-all">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> 1-Click Rollback
+                            </button>
+                            <button class="btn btn-outline-cyan btn-xs" id="btn-view-report" disabled>
+                                <i class="fa-solid fa-file-lines"></i> Forensic Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="incident-details-container">
+                        <div class="empty-incident-state">
+                            <i class="fa-solid fa-shield-check shield-icon-big"></i>
+                            <h4>Host is Clean &amp; Protected</h4>
+                            <p>No active ransomware threats detected. Continuous monitoring active.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REAL-TIME SOC ALERTS FEED -->
+                <div class="glass-panel" style="margin-top: 20px;">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-tower-broadcast text-accent"></i> Security Operations Event Stream</div>
+                        <span class="badge badge-info" id="alert-counter-badge">0 ALERTS</span>
+                    </div>
+                    <div class="alerts-feed" id="alerts-feed-list">
+                        <div class="alert-item alert-info">
+                            <div class="alert-icon"><i class="fa-solid fa-info-circle"></i></div>
+                            <div class="alert-body">
+                                <div class="alert-title">RansomVanguard Engine Initialized</div>
+                                <div class="alert-desc">All 6 defense stages armed. Watchdog sensors &amp; Canary tripwires active.</div>
+                                <div class="alert-time">Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6-Stage Threat Detonation Result Modal Visualizer -->
+    <div class="modal-overlay" id="detonation-result-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fa-solid fa-shield-halved text-danger"></i> Autonomous 6-Stage Defense Execution Summary</div>
+                <button class="btn-close-modal" id="btn-close-detonation-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Summary Metrics Box -->
+                <div class="det-summary-box">
+                    <div class="det-summary-item">
+                        <span class="det-summary-label">Artifact</span>
+                        <span class="det-summary-val text-accent" id="det-modal-artifact">-</span>
+                    </div>
+                    <div class="det-summary-item">
+                        <span class="det-summary-label">Assessed Risk</span>
+                        <span class="det-summary-val text-danger" id="det-modal-score">-</span>
+                    </div>
+                    <div class="det-summary-item">
+                        <span class="det-summary-label">Threat Family</span>
+                        <span class="det-summary-val text-warning" id="det-modal-family">-</span>
+                    </div>
+                    <div class="det-summary-item">
+                        <span class="det-summary-label">Total Execution</span>
+                        <span class="det-summary-val text-accent" id="det-modal-duration">-</span>
+                    </div>
+                    <div class="det-summary-item">
+                        <span class="det-summary-label">Self-Healing</span>
+                        <span class="det-summary-val text-success" id="det-modal-restored">-</span>
+                    </div>
+                </div>
+
+                <!-- 6-Stage Timeline Stepper -->
+                <div class="section-title-small" style="margin-bottom: 10px;"><i class="fa-solid fa-timeline"></i> 6-STAGE AUTONOMOUS RESPONSE LIFECYCLE BREAKDOWN</div>
+                <div class="det-stages-container" id="det-modal-stages-list">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
+                    <button class="btn btn-outline-cyan" id="btn-modal-view-report">
+                        <i class="fa-solid fa-file-contract"></i> View Forensic Post-Mortem Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forensic Report Modal -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fa-solid fa-microscope text-accent"></i> Forensic Incident Post-Mortem</div>
+                <button class="btn-close-modal" id="btn-close-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-report-body">
+                <iframe id="report-iframe" style="width: 100%; height: 550px; border: none; border-radius: 8px;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-container"></div>
+
+    <script src="/static/js/charts.js"></script>
+    <script src="/static/js/simulator_ui.js"></script>
+    <script src="/static/js/threat_lab.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+resource 'azuread_user' 'admin' { user_principal_name = 'secops@enterprise.com' }

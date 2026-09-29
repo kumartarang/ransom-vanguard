@@ -1,0 +1,73 @@
+{
+  "app_name": "RansomVanguard",
+  "version": "1.0.0",
+  "mode": "autonomous",
+  "monitoring": {
+    "monitored_paths": [
+      "./simulator/sandbox",
+      "./canary_vault"
+    ],
+    "file_extensions_whitelist": [".tmp", ".log"],
+    "entropy_threshold": 7.55,
+    "burst_file_count_threshold": 8,
+    "burst_time_window_seconds": 2.0,
+    "scan_file_sample_bytes": 65536
+  },
+  "canary": {
+    "enabled": true,
+    "canary_folder": "./canary_vault",
+    "canary_count": 5,
+    "file_types": ["docx", "xlsx", "pdf", "sql", "txt"]
+  },
+  "detection": {
+    "ransomware_extensions": [
+      ".locked", ".crypted", ".crypto", ".enc", ".lockbit", ".blackcat",
+      ".alphv", ".conti", ".phobos", ".ryuk", ".wannacry", ".mallox",
+      ".makop", ".rhysida", ".akira", ".play", ".royal", ".stop", ".djvu"
+    ],
+    "ransom_note_patterns": [
+      "readme_to_recover.txt",
+      "how_to_decrypt.html",
+      "restore-my-files.txt",
+      "lockbit_readme.txt",
+      "decrypt_instructions.html",
+      "readme.txt",
+      "_readme.txt",
+      "help_recover.txt"
+    ],
+    "suspicious_commands": [
+      "vssadmin delete shadows",
+      "vssadmin.exe delete shadows",
+      "bcdedit /set {default} bootstatuspolicy ignoreallfailures",
+      "bcdedit /set {default} recoveryenabled no",
+      "wbadmin delete catalog",
+      "wbadmin delete systemstatebackup",
+      "wevtutil cl security",
+      "wevtutil cl system"
+    ]
+  },
+  "response": {
+    "auto_containment": true,
+    "kill_process": true,
+    "isolate_network": false,
+    "quarantine_payload": true,
+    "auto_recover_files": true,
+    "quarantine_dir": "./quarantine_vault"
+  },
+  "alerting": {
+    "console_alerts": true,
+    "websocket_alerts": true,
+    "windows_event_log": true,
+    "webhook_enabled": false,
+    "webhook_url": ""
+  },
+  "recovery": {
+    "micro_snapshot_enabled": true,
+    "micro_snapshot_dir": "./recovery_snapshots",
+    "max_snapshot_history": 500
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8877
+  }
+}
